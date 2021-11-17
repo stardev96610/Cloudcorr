@@ -18,7 +18,7 @@ router.get('/', function(req, res, next) {
     });
 });
 
-// display add book page
+// display add user page
 router.get('/add', function(req, res, next) {    
     // render to add.ejs
     res.render('users/add', {
@@ -28,7 +28,7 @@ router.get('/add', function(req, res, next) {
     })
 })
 
-// add a new book
+// add a new user
 router.post('/add', function(req, res, next) {    
 
     let name = req.body.name;
@@ -71,14 +71,14 @@ router.post('/add', function(req, res, next) {
                     phone_number: phone_number
                 })
             } else {                
-                req.flash('success', 'Book successfully added');
+                req.flash('success', 'User successfully added');
                 res.redirect('/users');
             }
         })
     }
 })
 
-// display edit book page
+// display edit user page
 router.get('/edit/(:id)', function(req, res, next) {
 
     let id = req.params.id;
@@ -88,14 +88,14 @@ router.get('/edit/(:id)', function(req, res, next) {
          
         // if user not found
         if (rows.length <= 0) {
-            req.flash('error', 'Book not found with id = ' + id)
+            req.flash('error', 'User not found with id = ' + id)
             res.redirect('/users')
         }
-        // if book found
+        // if user found
         else {
             // render to edit.ejs
             res.render('users/edit', {
-                title: 'Edit Book', 
+                title: 'Edit User', 
                 id: rows[0].id,
                 name: rows[0].name,
                 number: rows[0].number,
@@ -105,7 +105,7 @@ router.get('/edit/(:id)', function(req, res, next) {
     })
 })
 
-// update book data
+// update user data
 router.post('/update/:id', function(req, res, next) {
 
     let id = req.params.id;
@@ -150,14 +150,14 @@ router.post('/update/:id', function(req, res, next) {
                     phone_number: phone_number
                 })
             } else {
-                req.flash('success', 'Book successfully updated');
+                req.flash('success', 'User successfully updated');
                 res.redirect('/users');
             }
         })
     }
 })
    
-// delete book
+// delete user
 router.get('/delete/(:id)', function(req, res, next) {
 
     let id = req.params.id;
@@ -171,7 +171,7 @@ router.get('/delete/(:id)', function(req, res, next) {
             res.redirect('/users')
         } else {
             // set flash message
-            req.flash('success', 'Book successfully deleted! ID = ' + id)
+            req.flash('success', 'User successfully deleted! ID = ' + id)
             // redirect to users page
             res.redirect('/users')
         }
