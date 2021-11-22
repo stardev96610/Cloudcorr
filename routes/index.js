@@ -6,7 +6,6 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
 router.post('/', function(req, res, next) {
-  console.log(req.body.email);
   if (req.body.email == "keelan417@gmail.com" && req.body.password == "Aa187187") {
     res.redirect('/users');
   } else {

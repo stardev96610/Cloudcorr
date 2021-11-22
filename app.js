@@ -11,6 +11,8 @@ var connection  = require('./lib/db');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var accountsRouter = require('./routes/accounts');
+var keywordsRouter = require('./routes/keywords');
 
 var app = express();
 
@@ -36,6 +38,8 @@ app.use(flash());
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/accounts', accountsRouter);
+app.use('/keywords', keywordsRouter);
 // app.use('/books', booksRouter);
 
 // catch 404 and forward to error handler
