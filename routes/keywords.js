@@ -65,7 +65,7 @@ router.post('/add', function(req, res, next) {
                     content: form_data.content,
                 })
             } else {                
-                req.flash('success', 'User successfully added');
+                req.flash('success', 'Keyword successfully added');
                 res.redirect('/keywords');
             }
         })
@@ -82,14 +82,14 @@ router.get('/edit/(:id)', function(req, res, next) {
          
         // if user not found
         if (rows.length <= 0) {
-            req.flash('error', 'User not found with id = ' + id)
+            req.flash('error', 'Keyword not found with id = ' + id)
             res.redirect('/keywords')
         }
         // if user found
         else {
             // render to edit.ejs
             res.render('keywords/edit', {
-                title: 'Edit User', 
+                title: 'Edit Keyword', 
                 id: rows[0].id,
                 keyword: rows[0].keyword,
                 content: rows[0].content,
@@ -139,7 +139,7 @@ router.post('/update/:id', function(req, res, next) {
                     content: form_data.content,
                 })
             } else {
-                req.flash('success', 'User successfully updated');
+                req.flash('success', 'Keyword successfully updated');
                 res.redirect('/keywords');
             }
         })
