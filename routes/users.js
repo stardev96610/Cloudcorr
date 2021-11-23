@@ -1,12 +1,11 @@
 var express = require('express');
 var router = express.Router();
 var dbConn  = require('../lib/db');
- 
 // display users page
-router.get('/', function(req, res, next) {
-      
+router.get('/', async function(req, res, next) {
+    
     dbConn.query('SELECT * FROM users ORDER BY id desc',function(err,rows)     {
- 
+        
         if(err) {
             req.flash('error', err);
             // render to views/users/index.ejs
