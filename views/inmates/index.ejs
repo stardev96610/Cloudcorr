@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Accounts</title>
+    <title>Inmates</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 </head>
 
@@ -26,10 +26,10 @@
                             <div class="card-header">
                                 <ul class="nav nav-pills w-100">
                                     <li class="nav-pill active">
-                                        <a class="nav-link">Accounts</a>
+                                        <a class="nav-link">Inmates</a>
                                     </li>
                                     <li class="nav-pill ml-auto">
-                                        <a class="nav-link active" href="/single/accounts/add">Add Account</a>
+                                        <a class="nav-link active" href="/single/inmates/add">Add Inmate</a>
                                     </li>
                                 </ul>
                             </div>
@@ -40,9 +40,9 @@
                                         <thead>
                                             <tr>
                                                 <th scope="col">#</th>
-                                                <th scope="col">Email</th>
-                                                <th scope="col">Password</th>
-                                                <th scope="col">Inmate Number</th>
+                                                <th scope="col">Name</th>
+                                                <th scope="col">Number</th>
+                                                <th scope="col">Phone Number</th>
                                                 <th width="200px">Action</th>
                                             </tr>
                                         </thead>
@@ -53,17 +53,17 @@
                                                         <%= (i+1) %>
                                                     </th>
                                                     <td>
-                                                        <%= data[i].email%>
+                                                        <%= data[i].name%>
                                                     </td>
                                                     <td>
-                                                        <%= data[i].password%>
+                                                        <%= data[i].number%>
                                                     </td>
                                                     <td>
-                                                        <%= data[i].inmate_number%>
+                                                        <%= data[i].phone_number%>
                                                     </td>
                                                     <td>
-                                                        <a class="btn btn-success edit" href="../single/accounts/edit/<%=data[i].id%>">Edit</a>
-                                                        <a class="btn btn-danger delete" href="../single/accounts/delete/<%=data[i].id%>">Delete</a>
+                                                        <a class="btn btn-success edit" href="../single/inmates/edit/<%=data[i].id%>">Edit</a>
+                                                        <a class="btn btn-danger delete" href="../single/inmates/delete/<%=data[i].id%>">Delete</a>
                                                     </td>
                                                 </tr>
                                                 <% } %>
@@ -73,7 +73,7 @@
 
                                         <!-- if result is empty -->
                                         <% if(!data.length) { %>
-                                            <p class="text-center">No Account found!</p>
+                                            <p class="text-center">No Inmate found!</p>
                                             <% } %>
 
                             </div>

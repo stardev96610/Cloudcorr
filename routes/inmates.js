@@ -1,47 +1,47 @@
 var express = require('express');
 var router = express.Router();
-var dbConn  = require('../lib/db');
-// display users page
+var dbConn = require('../lib/db');
+// display inmates page
 router.get('/', async function(req, res, next) {
-    
-    dbConn.query('SELECT * FROM users ORDER BY id desc',function(err,rows)     {
-        
-        if(err) {
+
+    dbConn.query('SELECT * FROM inmates ORDER BY id desc', function(err, rows) {
+
+        if (err) {
             req.flash('error', err);
-            // render to views/users/index.ejs
-            res.render('users',{data:''});   
+            // render to views/inmates/index.ejs
+            res.render('inmates', { data: '' });
         } else {
-            // render to views/users/index.ejs
-            res.render('users',{data:rows});
+            // render to views/inmates/index.ejs
+            res.render('inmates', { data: rows });
         }
     });
 });
 
-// display add user page
-router.get('/add', function(req, res, next) {    
+// display add inmate page
+router.get('/add', function(req, res, next) {
     // render to add.ejs
-    res.render('users/add', {
+    res.render('inmates/add', {
         name: '',
         number: '',
         phone_number: ''
     })
 })
 
-// add a new user
-router.post('/add', function(req, res, next) {    
+// add a new inmate
+router.post('/add', function(req, res, next) {
 
     let name = req.body.name;
     let number = req.body.number;
     let phone_number = req.body.phone_number;
     let errors = false;
 
-    if(name.length === 0 || number.length === 0) {
+    if (name.length === 0 || number.length === 0) {
         errors = true;
 
         // set flash message
         req.flash('error', "Please enter name and number");
         // render to add.ejs with flash message
-        res.render('users/add', {
+        res.render('inmates/add', {
             name: name,
             number: number,
             phone_number: phone_number
@@ -49,52 +49,52 @@ router.post('/add', function(req, res, next) {
     }
 
     // if no error
-    if(!errors) {
+    if (!errors) {
 
         var form_data = {
             name: name,
             number: number,
             phone_number: phone_number
         }
-        
+
         // insert query
-        dbConn.query('INSERT INTO users SET ?', form_data, function(err, result) {
+        dbConn.query('INSERT INTO inmates SET ?', form_data, function(err, result) {
             //if(err) throw err
             if (err) {
                 req.flash('error', err)
-                 
+
                 // render to add.ejs
-                res.render('users/add', {
+                res.render('inmates/add', {
                     name: form_data.name,
                     number: form_data.number,
                     phone_number: phone_number
                 })
-            } else {                
-                req.flash('success', 'User successfully added');
-                res.redirect('/users');
+            } else {
+                req.flash('success', 'Inmate successfully added');
+                res.redirect('/single/inmates');
             }
         })
     }
 })
 
-// display edit user page
+// display edit inmate page
 router.get('/edit/(:id)', function(req, res, next) {
 
     let id = req.params.id;
-   
-    dbConn.query('SELECT * FROM users WHERE id = ' + id, function(err, rows, fields) {
-        if(err) throw err
-         
-        // if user not found
+
+    dbConn.query('SELECT * FROM inmates WHERE id = ' + id, function(err, rows, fields) {
+        if (err) throw err
+
+        // if inmate not found
         if (rows.length <= 0) {
-            req.flash('error', 'User not found with id = ' + id)
-            res.redirect('/users')
+            req.flash('error', 'Inmate not found with id = ' + id)
+            res.redirect('/single/inmates')
         }
-        // if user found
+        // if inmate found
         else {
             // render to edit.ejs
-            res.render('users/edit', {
-                title: 'Edit User', 
+            res.render('inmates/edit', {
+                title: 'Edit Inmate',
                 id: rows[0].id,
                 name: rows[0].name,
                 number: rows[0].number,
@@ -104,7 +104,7 @@ router.get('/edit/(:id)', function(req, res, next) {
     })
 })
 
-// update user data
+// update inmate data
 router.post('/update/:id', function(req, res, next) {
 
     let id = req.params.id;
@@ -113,13 +113,13 @@ router.post('/update/:id', function(req, res, next) {
     let phone_number = req.body.phone_number;
     let errors = false;
 
-    if(name.length === 0 || number.length === 0) {
+    if (name.length === 0 || number.length === 0) {
         errors = true;
-        
+
         // set flash message
         req.flash('error', "Please enter name and number");
         // render to add.ejs with flash message
-        res.render('users/edit', {
+        res.render('inmates/edit', {
             id: req.params.id,
             name: name,
             number: number,
@@ -128,51 +128,51 @@ router.post('/update/:id', function(req, res, next) {
     }
 
     // if no error
-    if( !errors ) {   
- 
+    if (!errors) {
+
         var form_data = {
-            name: name,
-            number: number,
-            phone_number: phone_number,
-        }
-        // update query
-        dbConn.query('UPDATE users SET ? WHERE id = ' + id, form_data, function(err, result) {
+                name: name,
+                number: number,
+                phone_number: phone_number,
+            }
+            // update query
+        dbConn.query('UPDATE inmates SET ? WHERE id = ' + id, form_data, function(err, result) {
             //if(err) throw err
             if (err) {
                 // set flash message
                 req.flash('error', err)
-                // render to edit.ejs
-                res.render('users/edit', {
+                    // render to edit.ejs
+                res.render('inmates/edit', {
                     id: req.params.id,
                     name: form_data.name,
                     number: form_data.number,
                     phone_number: phone_number
                 })
             } else {
-                req.flash('success', 'User successfully updated');
-                res.redirect('/users');
+                req.flash('success', 'Inmate successfully updated');
+                res.redirect('/single/inmates');
             }
         })
     }
 })
-   
-// delete user
+
+// delete inmate
 router.get('/delete/(:id)', function(req, res, next) {
 
     let id = req.params.id;
-     
-    dbConn.query('DELETE FROM users WHERE id = ' + id, function(err, result) {
+
+    dbConn.query('DELETE FROM inmates WHERE id = ' + id, function(err, result) {
         //if(err) throw err
         if (err) {
             // set flash message
             req.flash('error', err)
-            // redirect to users page
-            res.redirect('/users')
+                // redirect to inmates page
+            res.redirect('/single/inmates')
         } else {
             // set flash message
-            req.flash('success', 'User successfully deleted! ID = ' + id)
-            // redirect to users page
-            res.redirect('/users')
+            req.flash('success', 'Inmate successfully deleted!')
+                // redirect to inmates page
+            res.redirect('/single/inmates')
         }
     })
 })

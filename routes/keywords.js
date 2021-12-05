@@ -1,24 +1,24 @@
 var express = require('express');
 var router = express.Router();
-var dbConn  = require('../lib/db');
- 
+var dbConn = require('../lib/db');
+
 // display keywords page
 router.get('/', function(req, res, next) {
-      
-    dbConn.query('SELECT * FROM keywords ORDER BY id desc',function(err,rows)     {
-        if(err) {
+
+    dbConn.query('SELECT * FROM keywords ORDER BY id desc', function(err, rows) {
+        if (err) {
             req.flash('error', err);
             // render to views/keywords/index.ejs
-            res.render('keywords',{data:''});   
+            res.render('keywords', { data: '' });
         } else {
             // render to views/keywords/index.ejs
-            res.render('keywords',{data:rows});
+            res.render('keywords', { data: rows });
         }
     });
 });
 
-// display add user page
-router.get('/add', function(req, res, next) {    
+// display add keyword page
+router.get('/add', function(req, res, next) {
     // render to add.ejs
     res.render('keywords/add', {
         keyword: '',
@@ -26,14 +26,14 @@ router.get('/add', function(req, res, next) {
     })
 })
 
-// add a new user
-router.post('/add', function(req, res, next) {    
+// add a new keyword
+router.post('/add', function(req, res, next) {
 
     let keyword = req.body.keyword;
     let content = req.body.content;
     let errors = false;
 
-    if(keyword.length === 0 || content.length === 0) {
+    if (keyword.length === 0 || content.length === 0) {
         errors = true;
 
         // set flash message
@@ -46,50 +46,50 @@ router.post('/add', function(req, res, next) {
     }
 
     // if no error
-    if(!errors) {
+    if (!errors) {
 
         var form_data = {
             keyword: keyword,
             content: content,
         }
-        
+
         // insert query
         dbConn.query('INSERT INTO keywords SET ?', form_data, function(err, result) {
             //if(err) throw err
             if (err) {
                 req.flash('error', err)
-                 
+
                 // render to add.ejs
                 res.render('keywords/add', {
                     keyword: form_data.keyword,
                     content: form_data.content,
                 })
-            } else {                
+            } else {
                 req.flash('success', 'Keyword successfully added');
-                res.redirect('/keywords');
+                res.redirect('/single/keywords');
             }
         })
     }
 })
 
-// display edit user page
+// display edit keyword page
 router.get('/edit/(:id)', function(req, res, next) {
 
     let id = req.params.id;
-   
+
     dbConn.query('SELECT * FROM keywords WHERE id = ' + id, function(err, rows, fields) {
-        if(err) throw err
-         
-        // if user not found
+        if (err) throw err
+
+        // if keyword not found
         if (rows.length <= 0) {
             req.flash('error', 'Keyword not found with id = ' + id)
-            res.redirect('/keywords')
+            res.redirect('/single/keywords')
         }
-        // if user found
+        // if keyword found
         else {
             // render to edit.ejs
             res.render('keywords/edit', {
-                title: 'Edit Keyword', 
+                title: 'Edit Keyword',
                 id: rows[0].id,
                 keyword: rows[0].keyword,
                 content: rows[0].content,
@@ -98,7 +98,7 @@ router.get('/edit/(:id)', function(req, res, next) {
     })
 })
 
-// update user data
+// update keyword data
 router.post('/update/:id', function(req, res, next) {
 
     let id = req.params.id;
@@ -106,9 +106,9 @@ router.post('/update/:id', function(req, res, next) {
     let content = req.body.content;
     let errors = false;
 
-    if(keyword.length === 0 || content.length === 0) {
+    if (keyword.length === 0 || content.length === 0) {
         errors = true;
-        
+
         // set flash message
         req.flash('error', "Please enter keyword and content");
         // render to add.ejs with flash message
@@ -120,19 +120,19 @@ router.post('/update/:id', function(req, res, next) {
     }
 
     // if no error
-    if( !errors ) {   
- 
+    if (!errors) {
+
         var form_data = {
-            keyword: keyword,
-            content: content,
-        }
-        // update query
+                keyword: keyword,
+                content: content,
+            }
+            // update query
         dbConn.query('UPDATE keywords SET ? WHERE id = ' + id, form_data, function(err, result) {
             //if(err) throw err
             if (err) {
                 // set flash message
                 req.flash('error', err)
-                // render to edit.ejs
+                    // render to edit.ejs
                 res.render('keywords/edit', {
                     id: req.params.id,
                     keyword: form_data.keyword,
@@ -140,29 +140,29 @@ router.post('/update/:id', function(req, res, next) {
                 })
             } else {
                 req.flash('success', 'Keyword successfully updated');
-                res.redirect('/keywords');
+                res.redirect('/single/keywords');
             }
         })
     }
 })
-   
-// delete user
+
+// delete keyword
 router.get('/delete/(:id)', function(req, res, next) {
 
     let id = req.params.id;
-     
+
     dbConn.query('DELETE FROM keywords WHERE id = ' + id, function(err, result) {
         //if(err) throw err
         if (err) {
             // set flash message
             req.flash('error', err)
-            // redirect to keywords page
-            res.redirect('/keywords')
+                // redirect to keywords page
+            res.redirect('/single/keywords')
         } else {
             // set flash message
-            req.flash('success', 'Keyword successfully deleted! ID = ' + id)
-            // redirect to keywords page
-            res.redirect('/keywords')
+            req.flash('success', 'Keyword successfully deleted!')
+                // redirect to keywords page
+            res.redirect('/single/keywords')
         }
     })
 })
